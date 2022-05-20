@@ -14,8 +14,7 @@ const count = ref(0)
     <a
       href="https://code.visualstudio.com/"
       target="_blank"
-    >VS Code</a>
-    +
+    >VS Code</a> +
     <a
       href="https://github.com/johnsoncodehk/volar"
       target="_blank"
@@ -48,7 +47,7 @@ const count = ref(0)
   </p>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 a {
   color: #42b983;
 }
