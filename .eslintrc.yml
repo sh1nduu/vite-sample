@@ -1,0 +1,23 @@
+env:
+  browser: true
+  es2021: true
+  "vue/setup-compiler-macros": true
+extends:
+  - "plugin:vue/vue3-recommended"
+  - "eslint:recommended"
+  - "@vue/typescript/recommended"
+parserOptions:
+  ecmaVersion: 12
+plugins:
+  - vue
+  - "@typescript-eslint"
+settings:
+  import/resolver:
+    typescript: []
+rules:
+  "@typescript-eslint/no-unused-vars": "off"
+  "no-restricted-imports":
+    - "error"
+    - patterns:
+        - group: [".*"]
+          message: Please use absolute import prefix '@/*'
