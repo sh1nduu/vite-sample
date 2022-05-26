@@ -1,9 +1,14 @@
 <script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
+import { provide } from 'vue'
+
 import HelloWorld from '@/components/HelloWorld.vue'
 import CountUpButton from '@/components/CountUpButton.vue'
 import SideBar from '@/components/SideBar.vue'
+
+import { useDaySelector, daySelectorKey, todaySelectorKey } from '@/composables/use-day-selector'
+
+provide(todaySelectorKey, useDaySelector(new Date()))
+provide(daySelectorKey, useDaySelector(new Date(2022, 4, 10)))
 </script>
 
 <template>

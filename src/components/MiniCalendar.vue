@@ -4,8 +4,10 @@ import MiniCalendarTable from '@/components/MiniCalendarTable.vue'
 </script>
 
 <template>
-  <mini-calendar-header />
-  <mini-calendar-table />
+  <div class="wrapper">
+    <mini-calendar-header />
+    <mini-calendar-table />
+  </div>
 </template>
 
 <style lang="scss"></style>

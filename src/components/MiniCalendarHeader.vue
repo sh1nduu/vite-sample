@@ -1,8 +1,19 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { computed, inject } from 'vue'
+import { format, startOfMonth } from 'date-fns'
+
+import { daySelectorKey, DaySelectorStore } from '@/composables/use-day-selector'
+
+const { selectedDay } = inject(daySelectorKey) as DaySelectorStore
+const month = computed(() => startOfMonth(selectedDay.value))
+const monthText = computed(() => format(month.value, 'yyyy年 M月'))
+</script>
 
 <template>
   <div class="header">
-    <div>2022年 5月</div>
+    <div class="month">
+      {{ monthText }}
+    </div>
     <div class="arrow-container">
       <div class="arrow">
         &lt;
@@ -21,6 +32,11 @@
   justify-content: space-between;
   align-items: center;
   height: 32px;
+  font-size: 14px;
+}
+
+.month {
+  padding-left: 10px;
 }
 
 .arrow-container {
@@ -28,16 +44,19 @@
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
+  margin-right: 4px;
 
   .arrow {
-    margin-left: 4px;
     height: 24px;
     width: 24px;
-    border-radius: 40px;
+    line-height: 24px;
     text-align: center;
+    transform: translateY(-2px);
+    font-size: 14px;
 
     &:hover {
-      background-color: #e5e5e5;
+      border-radius: 40px;
+      background-color: lightgray;
     }
   }
 }
