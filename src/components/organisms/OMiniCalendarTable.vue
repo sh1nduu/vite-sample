@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-
-import { format, isSameDay as dfIsSameDay } from 'date-fns'
+import { format } from 'date-fns'
 import { ja } from 'date-fns/locale'
+
+import ACircleButton from '@/components/atoms/ACircleButton.vue'
 
 import * as C from '@/calendar'
 import { useDaySelector } from '@/composables/use-day-selector'
@@ -10,114 +11,76 @@ import { useDaySelector } from '@/composables/use-day-selector'
 interface Props {
   selectedDay: Date
   today: Date
+  displayMonth: Date
 }
 const props = defineProps<Props>()
 
 interface Emits {
   (e: 'update:selectedDay', value: Date): void
+  (e: 'update:displayMonth', value: Date): void
 }
 const emits = defineEmits<Emits>()
 
 const { day: selectedDayLocal, selectDay: selectDayLocal } = useDaySelector(props.selectedDay)
 
-const days = computed(() => C.daysInMonthCalendar(props.selectedDay))
-const daysOfWeek = computed(() => C.daysOfWeek(props.selectedDay))
+const days = computed(() => C.daysInMonthCalendar(props.displayMonth))
+const daysOfWeek = computed(() => C.daysOfWeek(props.displayMonth))
 
-const formatDayOfWeek = (day: Date) => format(day, 'E', { locale: ja })
-const dayNumber = (day: Date) => day.getDate()
-const isSameMonth = C.isSameMonth(props.today)
+const formatDayOfWeek = (day: Date, pattern: string) => format(day, pattern, { locale: ja })
+const formatDay = (day: Date) => day.getDate()
+const isSameMonth = (day: Date) => {
+  // Should capture the props, not it's value
+  return C.isSameMonth(props.displayMonth)(day)
+}
 const isSelectedLocal = (day: Date) => {
-  const selected = selectedDayLocal // Should capture the ref, not it's value
-  return C.isSameDay(selected.value)(day)
+  // Should capture the ref, not it's value
+  return C.isSameDay(selectedDayLocal.value)(day)
 }
 const isToday = C.isSameDay(props.today)
-const handleOnClickDay = (day: Date) => (isSelectedLocal(day) ? emits('update:selectedDay', day) : selectDayLocal(day))
+const handleOnClickDay = (day: Date) => {
+  if (!isSameMonth(day)) {
+    emits('update:displayMonth', day)
+  }
+  if (isSelectedLocal(day)) {
+    emits('update:selectedDay', day)
+  } else {
+    selectDayLocal(day)
+  }
+}
 </script>
 
 <template>
-  <div class="m-mini-calendar-table">
-    <div
+  <div class="o-mini-calendar-table">
+    <a-circle-button
       v-for="(day, index) in daysOfWeek"
       :key="index"
-      class="day-of-week"
+      class="text"
+      display="xs"
+      muted
+      disabled
+      :tooltip-text="formatDayOfWeek(day, 'EEEE')"
     >
-      <div class="text mute-text">
-        {{ formatDayOfWeek(day) }}
-      </div>
-    </div>
-    <div
+      {{ formatDayOfWeek(day, 'E') }}
+    </a-circle-button>
+    <a-circle-button
       v-for="(day, index) in days"
       :key="index"
-      class="day"
+      display="xs"
+      :muted="!isSameMonth(day)"
+      :color="isToday(day) ? 'pastel' : isSelectedLocal(day) ? 'light' : 'default'"
       @click="handleOnClickDay(day)"
     >
-      <div
-        class="text"
-        :class="{ 'mute-text': !isSameMonth(day), selected: isSelectedLocal(day), today: isToday(day) }"
-      >
-        {{ dayNumber(day) }}
-      </div>
-    </div>
+      {{ formatDay(day) }}
+    </a-circle-button>
   </div>
 </template>
 
 <style lang="scss">
-.m-mini-calendar-table {
+.o-mini-calendar-table {
   display: grid;
   width: 100%;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(7, 1fr);
   place-items: center;
-  cursor: pointer;
-
-  &:nth-child(-n + 7) {
-    cursor: default;
-  }
-}
-
-.cell {
-  cursor: pointer;
-
-  .text {
-    font-size: 10px;
-    width: 24px;
-    height: 24px;
-    text-align: center;
-    line-height: 24px;
-    border-radius: 24px;
-    padding-bottom: 4px;
-    cursor: pointer;
-
-    &.mute-text {
-      color: gray;
-    }
-  }
-}
-
-.day-of-week {
-  @extend .cell;
-  cursor: default;
-  .text {
-    cursor: default;
-  }
-}
-
-.day {
-  @extend .cell;
-
-  .text {
-    &:hover {
-      background-color: lightgray;
-    }
-
-    &.selected {
-      background-color: skyblue;
-    }
-
-    &.today {
-      color: white;
-      background-color: blue;
-    }
-  }
 }
 </style>

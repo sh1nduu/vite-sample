@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import OMiniCalendarHeader from '@/components/organisms/OMiniCalendarHeader.vue'
 import OMiniCalendarTable from '@/components/organisms/OMiniCalendarTable.vue'
-import { computed } from 'vue';
+import { useDaySelector } from '@/composables/use-day-selector';
+import { computed, ref } from 'vue';
 
 interface Props {
   selectedDay: Date
@@ -19,13 +20,15 @@ const selectedDayModel = computed({
   set: (value: Date) => emits('update:selectedDay', value)
 })
 
+const { dayModel: monthModel } = useDaySelector(props.selectedDay)
 </script>
 
 <template>
   <div class="o-mini-calendar">
-    <o-mini-calendar-header :selected-day="selectedDay" />
+    <o-mini-calendar-header v-model:day="monthModel" />
     <o-mini-calendar-table
       v-model:selected-day="selectedDayModel"
+      v-model:display-month="monthModel"
       :today="today"
     />
   </div>
