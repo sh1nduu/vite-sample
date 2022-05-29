@@ -2,15 +2,17 @@
 import { computed, inject } from 'vue'
 import { format, startOfMonth } from 'date-fns'
 
-import { daySelectorKey, DaySelectorStore } from '@/composables/use-day-selector'
+interface Props {
+  selectedDay: Date
+}
+const props = defineProps<Props>()
 
-const { selectedDay } = inject(daySelectorKey) as DaySelectorStore
-const month = computed(() => startOfMonth(selectedDay.value))
+const month = computed(() => startOfMonth(props.selectedDay))
 const monthText = computed(() => format(month.value, 'yyyy年 M月'))
 </script>
 
 <template>
-  <div class="header">
+  <div class="m-mini-calendar-header">
     <div class="month">
       {{ monthText }}
     </div>
@@ -26,7 +28,7 @@ const monthText = computed(() => format(month.value, 'yyyy年 M月'))
 </template>
 
 <style lang="scss">
-.header {
+.m-mini-calendar-header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;

@@ -1,10 +1,15 @@
-import { InjectionKey, readonly, ref } from 'vue'
+import { InjectionKey, readonly, ref, computed } from 'vue'
 
 export function useDaySelector(initial: Date) {
-  const _selectedDay = ref(initial)
-  const selectedDay = readonly(_selectedDay)
-  const selectDay = (day: Date) => (_selectedDay.value = day)
-  return { selectedDay, selectDay }
+  const _day = ref(initial)
+  const day = readonly(_day)
+  const selectDay = (day: Date) => (_day.value = day)
+  const dayModel = computed({
+    get: () => day.value,
+    set: selectDay,
+  })
+
+  return { day, selectDay, dayModel }
 }
 
 export type DaySelectorStore = ReturnType<typeof useDaySelector>

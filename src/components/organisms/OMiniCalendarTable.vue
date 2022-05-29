@@ -1,32 +1,41 @@
 <script setup lang="ts">
-import { ref, inject, computed } from 'vue'
+import { computed } from 'vue'
 
 import { format, isSameDay as dfIsSameDay } from 'date-fns'
 import { ja } from 'date-fns/locale'
 
 import * as C from '@/calendar'
-import { daySelectorKey, DaySelectorStore, todaySelectorKey, useDaySelector } from '@/composables/use-day-selector'
+import { useDaySelector } from '@/composables/use-day-selector'
 
-const { selectedDay, selectDay } = inject(daySelectorKey) as DaySelectorStore
-const { selectedDay: today } = inject(todaySelectorKey) as DaySelectorStore
-const { selectedDay: selectedDayLocal, selectDay: selectDayLocal } = useDaySelector(selectedDay.value)
+interface Props {
+  selectedDay: Date
+  today: Date
+}
+const props = defineProps<Props>()
 
-const days = computed(() => C.daysInMonthCalendar(selectedDay.value))
-const daysOfWeek = computed(() => C.daysOfWeek(selectedDay.value))
+interface Emits {
+  (e: 'update:selectedDay', value: Date): void
+}
+const emits = defineEmits<Emits>()
+
+const { day: selectedDayLocal, selectDay: selectDayLocal } = useDaySelector(props.selectedDay)
+
+const days = computed(() => C.daysInMonthCalendar(props.selectedDay))
+const daysOfWeek = computed(() => C.daysOfWeek(props.selectedDay))
 
 const formatDayOfWeek = (day: Date) => format(day, 'E', { locale: ja })
 const dayNumber = (day: Date) => day.getDate()
-const isSameMonth = C.isSameMonth(today.value)
+const isSameMonth = C.isSameMonth(props.today)
 const isSelectedLocal = (day: Date) => {
   const selected = selectedDayLocal // Should capture the ref, not it's value
   return C.isSameDay(selected.value)(day)
 }
-const isToday = C.isSameDay(today.value)
-const handleOnClickDay = (day: Date) => (isSelectedLocal(day) ? selectDay(day) : selectDayLocal(day))
+const isToday = C.isSameDay(props.today)
+const handleOnClickDay = (day: Date) => (isSelectedLocal(day) ? emits('update:selectedDay', day) : selectDayLocal(day))
 </script>
 
 <template>
-  <div class="table">
+  <div class="m-mini-calendar-table">
     <div
       v-for="(day, index) in daysOfWeek"
       :key="index"
@@ -53,7 +62,7 @@ const handleOnClickDay = (day: Date) => (isSelectedLocal(day) ? selectDay(day) :
 </template>
 
 <style lang="scss">
-.table {
+.m-mini-calendar-table {
   display: grid;
   width: 100%;
   grid-template-columns: repeat(7, 1fr);
