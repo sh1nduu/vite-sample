@@ -2,7 +2,7 @@
 import OMiniCalendarHeader from '@/components/organisms/OMiniCalendarHeader.vue'
 import OMiniCalendarTable from '@/components/organisms/OMiniCalendarTable.vue'
 import { useDaySelector } from '@/composables/use-day-selector';
-import { computed, ref } from 'vue';
+import { computed, ref, watchEffect } from 'vue';
 
 interface Props {
   selectedDay: Date
@@ -21,6 +21,8 @@ const selectedDayModel = computed({
 })
 
 const { dayModel: monthModel } = useDaySelector(props.selectedDay)
+watchEffect(() => monthModel.value = props.selectedDay)
+
 </script>
 
 <template>
@@ -34,4 +36,4 @@ const { dayModel: monthModel } = useDaySelector(props.selectedDay)
   </div>
 </template>
 
-<style lang="scss"></style>
+<style scoped lang="scss"></style>

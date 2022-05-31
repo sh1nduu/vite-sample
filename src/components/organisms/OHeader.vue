@@ -11,7 +11,7 @@
 
 <style scoped lang="scss">
 .o-header {
-  height: 64px;
+  height: 100%;
   display: flex;
   align-items: center;
   box-sizing: border-box;

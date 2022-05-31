@@ -45,7 +45,7 @@ const prevMonth = () => emits('update:day', subMonths(props.day, 1))
   </div>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 .o-mini-calendar-header {
   display: flex;
   flex-direction: row;

@@ -3,7 +3,7 @@
 
 <template>
   <div class="t-default">
-    <header>
+    <header class="header">
       <slot name="header" />
     </header>
     <main class="main">
@@ -18,17 +18,30 @@
 </template>
 
 <style scoped lang="scss">
+
+$header-height: 64px;
+$menu-width: 256px;
+
+.t-default {
+  height: 100%;
+}
+
+.header {
+  height: $header-height;
+}
+
 .main {
   display: flex;
   flex-direction: row;
-  height: 100vh;
+  height: calc(100% - $header-height);
 }
 .content {
-  background-color: #2c3e50;
-  width: calc(100% - 256px);
+  width: calc(100% - $menu-width);
+  height: 100%;
 }
 .menu {
-  width: 256px;
+  width: $menu-width;
+  height: 100%;
   padding: 16px;
 }
 </style>

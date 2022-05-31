@@ -1,4 +1,4 @@
-import { InjectionKey, readonly, ref, computed } from 'vue'
+import { InjectionKey, readonly, ref, computed, Prop } from 'vue'
 
 export function useDaySelector(initial: Date) {
   const _day = ref(initial)

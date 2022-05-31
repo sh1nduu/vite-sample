@@ -2,14 +2,14 @@
 import { inject } from 'vue'
 
 import TDefault from '@/components/templates/TDefault.vue';
+import OCalendar from '@/components/organisms/OCalendar.vue'
 import OHeader from '@/components/organisms/OHeader.vue'
 import OSideMenu from '@/components/organisms/OSideMenu.vue'
 import OMiniCalendar from '@/components/organisms/OMiniCalendar.vue'
-import HelloWorld from '@/components/HelloWorld.vue'
 
 import { daySelectorKey, DaySelectorStore, todaySelectorKey } from '@/composables/use-day-selector'
 
-const { dayModel: selectedDayModel } = inject(daySelectorKey) as DaySelectorStore
+const { day: selectedDay, dayModel: selectedDayModel } = inject(daySelectorKey) as DaySelectorStore
 const { day: today } = inject(todaySelectorKey) as DaySelectorStore
 </script>
 
@@ -29,11 +29,10 @@ const { day: today } = inject(todaySelectorKey) as DaySelectorStore
     </template>
 
     <template #default>
-      <img
-        alt="Vue logo"
-        src="@/assets/logo.png"
-      >
-      <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
+      <o-calendar
+        v-model:selected-day="selectedDayModel"
+        :today="today"
+      />
     </template>
   </t-default>
 </template>

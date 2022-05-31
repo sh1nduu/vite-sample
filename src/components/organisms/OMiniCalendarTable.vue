@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watch, watchEffect } from 'vue'
 import { format } from 'date-fns'
 import { ja } from 'date-fns/locale'
 
@@ -22,6 +22,14 @@ interface Emits {
 const emits = defineEmits<Emits>()
 
 const { day: selectedDayLocal, selectDay: selectDayLocal } = useDaySelector(props.selectedDay)
+watch(
+  () => props.selectedDay,
+  (day: Date) => {
+    if (day !== selectedDayLocal.value) {
+      selectDayLocal(props.selectedDay)
+    }
+  }
+)
 
 const days = computed(() => C.daysInMonthCalendar(props.displayMonth))
 const daysOfWeek = computed(() => C.daysOfWeek(props.displayMonth))
@@ -75,7 +83,7 @@ const handleOnClickDay = (day: Date) => {
   </div>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 .o-mini-calendar-table {
   display: grid;
   width: 100%;
