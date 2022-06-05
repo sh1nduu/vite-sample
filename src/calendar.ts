@@ -1,17 +1,16 @@
+import { CALENDAR_MONTH_DAYS } from '@/constants'
 import {
   addDays,
   addMonths,
   eachDayOfInterval,
   endOfWeek,
   format as dfFormat,
+  getWeek,
+  isSameDay as dfIsSameDay,
   startOfMonth,
   startOfWeek,
-  isSameDay as dfIsSameDay,
-  getWeek,
 } from 'date-fns'
 import { ja } from 'date-fns/locale'
-
-import { CALENDAR_MONTH_DAYS } from '@/constants'
 
 export const startDayOfMonthCalendar = (day: Date) => startOfWeek(startOfMonth(day))
 
@@ -32,4 +31,5 @@ export const isFirstDayOfNextMonth = (month: Date) => (day: Date) => isSameMonth
 
 export const format = (pattern: string) => (day: Date) => dfFormat(day, pattern, { locale: ja })
 export const formatWeekShort = format('E')
+export const formatWeekLong = format('EEEE')
 export const formatDaySingle = format('d')

@@ -14,7 +14,6 @@ interface Emits {
   (e: 'onClickLabel', value: unknown): void
 }
 const emits = defineEmits<Emits>()
-
 </script>
 
 <template>

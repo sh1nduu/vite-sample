@@ -1,5 +1,4 @@
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div class="t-default">
@@ -18,7 +17,6 @@
 </template>
 
 <style scoped lang="scss">
-
 $header-height: 64px;
 $menu-width: 256px;
 

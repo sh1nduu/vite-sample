@@ -1,37 +1,40 @@
 <script setup lang="ts">
 import OMiniCalendarHeader from '@/components/organisms/OMiniCalendarHeader.vue'
 import OMiniCalendarTable from '@/components/organisms/OMiniCalendarTable.vue'
-import { useDaySelector } from '@/composables/use-day-selector';
-import { computed, ref, watchEffect } from 'vue';
+import { Calendar, useCalendar, useCalendarMutator } from '@/composables/use-month-calendar'
+import { watch } from 'vue'
 
 interface Props {
-  selectedDay: Date
-  today: Date
+  calendar: Calendar
 }
 const props = defineProps<Props>()
 
-interface Emits {
-  (e: 'update:selectedDay', value: Date): void
-}
-const emits = defineEmits<Emits>()
-
-const selectedDayModel = computed({
-  get: () => props.selectedDay,
-  set: (value: Date) => emits('update:selectedDay', value)
+const { calendar: calendarLocal } = useCalendar({
+  today: props.calendar.today,
+  selectedDay: props.calendar.selectedDay.value,
 })
-
-const { dayModel: monthModel } = useDaySelector(props.selectedDay)
-watchEffect(() => monthModel.value = props.selectedDay)
-
+const { setMonth: setMonthGlobal, setSelectedDay: setSelectedDayGlobal } = useCalendarMutator(props.calendar)
+const { setMonth: setMonthLocal, setSelectedDay: setSelectedDayLocal } = useCalendarMutator(calendarLocal)
+watch(
+  () => props.calendar.month,
+  (dateRef) => setMonthLocal(dateRef.value)
+)
+watch(
+  () => props.calendar.selectedDay,
+  (dateRef) => setSelectedDayLocal(dateRef.value)
+)
 </script>
 
 <template>
   <div class="o-mini-calendar">
-    <o-mini-calendar-header v-model:day="monthModel" />
+    <o-mini-calendar-header
+      :calendar="calendarLocal"
+      @update:month="setMonthLocal"
+    />
     <o-mini-calendar-table
-      v-model:selected-day="selectedDayModel"
-      v-model:display-month="monthModel"
-      :today="today"
+      :calendar="calendarLocal"
+      @update:month="setMonthGlobal"
+      @update:selected-day="setSelectedDayGlobal"
     />
   </div>
 </template>

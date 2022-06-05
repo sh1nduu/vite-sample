@@ -1,4 +1,4 @@
-import { InjectionKey, readonly, ref, computed, Prop } from 'vue'
+import { computed, InjectionKey, readonly, ref } from 'vue'
 
 export function useDaySelector(initial: Date) {
   const _day = ref(initial)
@@ -15,4 +15,3 @@ export function useDaySelector(initial: Date) {
 export type DaySelectorStore = ReturnType<typeof useDaySelector>
 
 export const daySelectorKey: InjectionKey<DaySelectorStore> = Symbol('DaySelectorStore')
-export const todaySelectorKey: InjectionKey<DaySelectorStore> = Symbol('TodaySelectorStore')

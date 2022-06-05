@@ -1,34 +1,22 @@
 <script setup lang="ts">
-import MCalendarMonthCell from '@/components/molecules/MCalendarMonthCell.vue'
-
-import { useMonthCalendar } from '@/composables/use-month-calendar'
 import * as C from '@/calendar'
+import MCalendarMonthCell from '@/components/molecules/MCalendarMonthCell.vue'
+import { Calendar, useCalendarMutator, useMonthCalendar } from '@/composables/use-month-calendar'
 import { isDate } from '@/type-guard'
 
 interface Props {
-  today: Date
-  displayMonth: Date
+  calendar: Calendar
 }
 const props = defineProps<Props>()
 
-interface Emits {
-  (e: 'onClickDayLabel', value: Date): void
-}
-const emits = defineEmits<Emits>()
-
-const {
-  days,
-  isSameMonth,
-  isToday,
-  isFirstWeekOfMonth,
-} = useMonthCalendar(props)
+const { setSelectedDay } = useCalendarMutator(props.calendar)
+const { days, isSameMonth, isToday, isFirstWeekOfMonth } = useMonthCalendar(props.calendar)
 
 const handleOnClickDayLabel = (day: unknown) => {
   if (isDate(day)) {
-    emits('onClickDayLabel', day)
+    setSelectedDay(day)
   }
 }
-
 </script>
 
 <template>
@@ -39,15 +27,13 @@ const handleOnClickDayLabel = (day: unknown) => {
       class="cell"
       :show-week="isFirstWeekOfMonth(day)"
       :muted="!isSameMonth(day)"
-      :label=" C.formatDaySingle(day)"
+      :label="C.formatDaySingle(day)"
       :sub-label="isFirstWeekOfMonth(day) ? C.formatWeekShort(day) : undefined"
       :active="isToday(day)"
       :value="day"
       @on-click-label="handleOnClickDayLabel"
     >
-      <div>
-        Event {{ index }}
-      </div>
+      <div>Event {{ index }}</div>
     </m-calendar-month-cell>
   </div>
 </template>

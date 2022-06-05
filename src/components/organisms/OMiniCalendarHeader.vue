@@ -1,24 +1,23 @@
 <script setup lang="ts">
-import { computed, inject } from 'vue'
-import { addMonths, format, startOfMonth, subMonths } from 'date-fns'
-
 import ACircleButton from '@/components/atoms/ACircleButton.vue'
+import { Calendar } from '@/composables/use-month-calendar'
+import { addMonths, format, subMonths } from 'date-fns'
+import { computed } from 'vue'
 
 interface Props {
-  day: Date
+  calendar: Calendar
 }
 const props = defineProps<Props>()
 
 interface Emits {
-  (e: 'update:day', value: Date): void
+  (e: 'update:month', value: Date): void
 }
 const emits = defineEmits<Emits>()
 
-const month = computed(() => startOfMonth(props.day))
-const monthText = computed(() => format(month.value, 'yyyy年 M月'))
+const monthText = computed(() => format(props.calendar.month.value, 'yyyy年 M月'))
 
-const nextMonth = () => emits('update:day', addMonths(props.day, 1))
-const prevMonth = () => emits('update:day', subMonths(props.day, 1))
+const nextMonth = () => emits('update:month', addMonths(props.calendar.month.value, 1))
+const prevMonth = () => emits('update:month', subMonths(props.calendar.month.value, 1))
 </script>
 
 <template>

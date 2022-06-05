@@ -1,54 +1,35 @@
 <script setup lang="ts">
-import { computed, watch, watchEffect } from 'vue'
-import { format } from 'date-fns'
-import { ja } from 'date-fns/locale'
-
-import ACircleButton from '@/components/atoms/ACircleButton.vue'
-
 import * as C from '@/calendar'
+import ACircleButton from '@/components/atoms/ACircleButton.vue'
 import { useDaySelector } from '@/composables/use-day-selector'
+import { Calendar, useMonthCalendar } from '@/composables/use-month-calendar'
+import { watch } from 'vue'
 
 interface Props {
-  selectedDay: Date
-  today: Date
-  displayMonth: Date
+  calendar: Calendar
 }
 const props = defineProps<Props>()
 
 interface Emits {
+  (e: 'update:month', value: Date): void
   (e: 'update:selectedDay', value: Date): void
-  (e: 'update:displayMonth', value: Date): void
 }
 const emits = defineEmits<Emits>()
 
-const { day: selectedDayLocal, selectDay: selectDayLocal } = useDaySelector(props.selectedDay)
+const { day: selectedDayLocal, selectDay: selectDayLocal } = useDaySelector(props.calendar.selectedDay.value)
+const isSelectedLocal = (day: Date) => C.isSameDay(selectedDayLocal.value)(day)
 watch(
-  () => props.selectedDay,
+  () => props.calendar.selectedDay.value,
   (day: Date) => {
     if (day !== selectedDayLocal.value) {
-      selectDayLocal(props.selectedDay)
+      selectDayLocal(props.calendar.selectedDay.value)
     }
   }
 )
+const { days, daysOfWeek, isSameMonth, isToday } = useMonthCalendar(props.calendar)
 
-const days = computed(() => C.daysInMonthCalendar(props.displayMonth))
-const daysOfWeek = computed(() => C.daysOfWeek(props.displayMonth))
-
-const formatDayOfWeek = (day: Date, pattern: string) => format(day, pattern, { locale: ja })
-const formatDay = (day: Date) => day.getDate()
-const isSameMonth = (day: Date) => {
-  // Should capture the props, not it's value
-  return C.isSameMonth(props.displayMonth)(day)
-}
-const isSelectedLocal = (day: Date) => {
-  // Should capture the ref, not it's value
-  return C.isSameDay(selectedDayLocal.value)(day)
-}
-const isToday = C.isSameDay(props.today)
 const handleOnClickDay = (day: Date) => {
-  if (!isSameMonth(day)) {
-    emits('update:displayMonth', day)
-  }
+  emits('update:month', day)
   if (isSelectedLocal(day)) {
     emits('update:selectedDay', day)
   } else {
@@ -66,9 +47,9 @@ const handleOnClickDay = (day: Date) => {
       display="xs"
       muted
       disabled
-      :tooltip-text="formatDayOfWeek(day, 'EEEE')"
+      :tooltip-text="C.formatWeekShort(day)"
     >
-      {{ formatDayOfWeek(day, 'E') }}
+      {{ C.formatWeekShort(day) }}
     </a-circle-button>
     <a-circle-button
       v-for="(day, index) in days"
@@ -78,7 +59,7 @@ const handleOnClickDay = (day: Date) => {
       :color="isToday(day) ? 'pastel' : isSelectedLocal(day) ? 'light' : 'default'"
       @click="handleOnClickDay(day)"
     >
-      {{ formatDay(day) }}
+      {{ C.formatDaySingle(day) }}
     </a-circle-button>
   </div>
 </template>

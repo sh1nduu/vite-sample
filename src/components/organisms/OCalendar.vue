@@ -1,34 +1,22 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-
 import OCalendarMonth from '@/components/organisms/OCalendarMonth.vue'
-import { usePropSync } from '@/composables/use-prop-sync';
+import { Calendar } from '@/composables/use-month-calendar'
+import { ref } from 'vue'
 
 interface Props {
-  selectedDay: Date
-  today: Date
+  calendar: Calendar
 }
 const props = defineProps<Props>()
 
-interface Emits {
-  (e: 'update:selectedDay', value: Date): void
-}
-const emits = defineEmits<Emits>()
-
 type DisplayMode = 'month' | 'week' | 'day'
 const displayMode = ref<DisplayMode>('month')
-
-const handleOnClickDayLabel = (day: Date) => emits('update:selectedDay', day)
 </script>
 
 <template>
   <o-calendar-month
     v-show="displayMode === 'month'"
-    :display-month="selectedDay"
-    :today="today"
-    @on-click-day-label="handleOnClickDayLabel"
+    :calendar="calendar"
   />
 </template>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>
