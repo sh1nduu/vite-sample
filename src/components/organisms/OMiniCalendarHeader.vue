@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ACircleButton from '@/components/atoms/ACircleButton.vue'
+import MArrowButtons from '@/components/molecules/MArrowButtons.vue'
 import { Calendar } from '@/composables/use-month-calendar'
 import { addMonths, format, subMonths } from 'date-fns'
 import { computed } from 'vue'
@@ -25,22 +25,14 @@ const prevMonth = () => emits('update:month', subMonths(props.calendar.month.val
     <div class="month">
       {{ monthText }}
     </div>
-    <div class="arrow-container">
-      <a-circle-button
-        class="arrow"
-        tooltip-text="前月"
-        @click="prevMonth"
-      >
-        &lt;
-      </a-circle-button>
-      <a-circle-button
-        class="arrow"
-        tooltip-text="翌月"
-        @click="nextMonth"
-      >
-        &gt;
-      </a-circle-button>
-    </div>
+    <m-arrow-buttons
+      class="arrow-container"
+      :size="22"
+      left-tooltip-text="前月"
+      right-tooltip-text="翌月"
+      @click-left="prevMonth"
+      @click-right="nextMonth"
+    />
   </div>
 </template>
 
@@ -59,14 +51,6 @@ const prevMonth = () => emits('update:month', subMonths(props.calendar.month.val
 }
 
 .arrow-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  margin-right: 4px;
-
-  &.arrow {
-    transform: translateY(-2px);
-  }
+  margin-right: 8px;
 }
 </style>

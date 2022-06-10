@@ -26,7 +26,7 @@ const textCss = computed(() => ({
 
 <template>
   <div
-    class="a-circle-button"
+    class="a-circle-button a-tooltip-container"
     :class="buttonCss"
   >
     <div
@@ -37,7 +37,7 @@ const textCss = computed(() => ({
     </div>
     <div
       v-if="tooltipText"
-      class="tooltip"
+      class="a-tooltip"
     >
       {{ tooltipText }}
     </div>
@@ -45,6 +45,8 @@ const textCss = computed(() => ({
 </template>
 
 <style scoped lang="scss">
+@import '@/assets/scss/tooltip';
+
 .a-circle-button {
   width: 100%;
   height: 100%;
@@ -59,10 +61,6 @@ const textCss = computed(() => ({
 
   &:not(.disabled):hover .text.c-default {
     background-color: lightgray;
-  }
-
-  &:hover .tooltip {
-    display: inline-block;
   }
 }
 
@@ -101,19 +99,5 @@ const textCss = computed(() => ({
     color: white;
     background-color: blue;
   }
-}
-
-.tooltip {
-  position: absolute;
-  color: white;
-  background-color: black;
-  opacity: 0.6;
-  top: 30px;
-  font-size: 12px;
-  display: none;
-  white-space: nowrap;
-  padding: 8px;
-  border-radius: 10%;
-  z-index: 1000;
 }
 </style>
