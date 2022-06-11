@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import AButton from '@/components/atoms/AButton.vue'
 import ACircleButton from '@/components/atoms/ACircleButton.vue'
+import ADropdown from '@/components/atoms/ADropdown.vue'
+import ADropdownItem from '@/components/atoms/ADropdownItem.vue'
 import AText from '@/components/atoms/AText.vue'
 import MArrowButtons from '@/components/molecules/MArrowButtons.vue'
 import MagnifyIcon from 'vue-material-design-icons/Magnify.vue'
@@ -42,9 +44,15 @@ import MenuIcon from 'vue-material-design-icons/Menu.vue'
         <a-circle-button class="item">
           <magnify-icon />
         </a-circle-button>
-        <div class="item">
-          Dropdown
-        </div>
+        <a-dropdown
+          class="item"
+          text="月"
+        >
+          <a-dropdown-item text="日" />
+          <a-dropdown-item text="週" />
+          <a-dropdown-item text="月" />
+          <a-dropdown-item text="年" />
+        </a-dropdown>
       </div>
     </div>
     <div class="right" />
