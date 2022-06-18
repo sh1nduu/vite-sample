@@ -7,6 +7,17 @@ import AText from '@/components/atoms/AText.vue'
 import MArrowButtons from '@/components/molecules/MArrowButtons.vue'
 import MagnifyIcon from 'vue-material-design-icons/Magnify.vue'
 import MenuIcon from 'vue-material-design-icons/Menu.vue'
+
+interface Props {
+  isOpenMenu: boolean
+}
+const props = defineProps<Props>()
+
+interface Emits {
+  (e: 'update:isOpenMenu', value: boolean): void
+}
+const emits = defineEmits<Emits>()
+const switchOpenMenu = () => emits('update:isOpenMenu', !props.isOpenMenu)
 </script>
 
 <template>
@@ -15,6 +26,7 @@ import MenuIcon from 'vue-material-design-icons/Menu.vue'
       <a-circle-button
         class="item"
         tooltip-text="メインメニュー"
+        @click="switchOpenMenu"
       >
         <menu-icon />
       </a-circle-button>

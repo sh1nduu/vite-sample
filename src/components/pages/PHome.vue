@@ -5,15 +5,23 @@ import OMiniCalendar from '@/components/organisms/OMiniCalendar.vue'
 import OSideMenu from '@/components/organisms/OSideMenu.vue'
 import TDefault from '@/components/templates/TDefault.vue'
 import { calendarKey, CalendarStore } from '@/composables/use-month-calendar'
+import { isOpenMenuKey, IsOpenMenuStore } from '@/composables/use-is-open-menu'
 import { inject } from 'vue'
 
-const { calendar: calendar } = inject(calendarKey) as CalendarStore
+const { calendar } = inject(calendarKey) as CalendarStore
+const { isOpenMenu, switchMenu } = inject(isOpenMenuKey) as IsOpenMenuStore
 </script>
 
 <template>
-  <t-default class="p-home">
+  <t-default
+    class="p-home"
+    :is-open-menu="isOpenMenu"
+  >
     <template #header>
-      <o-header />
+      <o-header
+        :is-open-menu="isOpenMenu"
+        @update:is-open-menu="switchMenu"
+      />
     </template>
 
     <template #menu>
