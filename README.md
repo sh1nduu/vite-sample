@@ -17,9 +17,16 @@ You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/
 
 ## Development Setup
 
+### Install libraries & husky
+
+```bash
+yarn install && yarn prepare
 ```
-# Install libraries & husky
-yarn i && yarn prepare
-# Run dev-server
+
+### Run dev-server
+
+```bash
 yarn dev
 ```
+
+If you're working in Github Codespaces, export the enviroment variable `export CODESPACE=1` to enable vite's HMR feature.

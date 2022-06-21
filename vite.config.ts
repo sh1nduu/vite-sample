@@ -8,7 +8,8 @@ export default defineConfig({
   resolve: {
     alias: [
       { find: /~(.+)/, replacement: path.resolve(__dirname, 'node_modules/$1') },
-      { find: "@", replacement: path.resolve(__dirname, 'src') },
-    ]
-  }
+      { find: '@', replacement: path.resolve(__dirname, 'src') },
+    ],
+  },
+  server: { hmr: { clientPort: process.env.CODESPACES ? 443 : undefined } },
 })
