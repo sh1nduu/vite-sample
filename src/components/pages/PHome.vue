@@ -20,6 +20,7 @@ const { isOpenMenu, switchMenu } = inject(isOpenMenuKey) as IsOpenMenuStore
     <template #header>
       <o-header
         :is-open-menu="isOpenMenu"
+        :calendar="calendar"
         @update:is-open-menu="switchMenu"
       />
     </template>

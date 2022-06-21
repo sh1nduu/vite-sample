@@ -22,10 +22,15 @@ export const calendarKey: InjectionKey<CalendarStore> = Symbol('CalendarStore')
 export function useCalendarMutator(calendar: Calendar) {
   const setSelectedDay = (day: Date) => (calendar.selectedDay.value = day)
   const setMonth = (day: Date) => (calendar.month.value = day)
+  const setToday = () => {
+    calendar.month.value = calendar.today.value
+    calendar.selectedDay.value = calendar.today.value
+  }
 
   return {
     setSelectedDay,
     setMonth,
+    setToday,
   }
 }
 

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import * as C from '@/calendar'
 import MArrowButtons from '@/components/molecules/MArrowButtons.vue'
 import { Calendar } from '@/composables/use-month-calendar'
 import { addMonths, format, subMonths } from 'date-fns'
@@ -16,8 +17,8 @@ const emits = defineEmits<Emits>()
 
 const monthText = computed(() => format(props.calendar.month.value, 'yyyy年 M月'))
 
-const nextMonth = () => emits('update:month', addMonths(props.calendar.month.value, 1))
-const prevMonth = () => emits('update:month', subMonths(props.calendar.month.value, 1))
+const nextMonth = () => emits('update:month', C.nextMonthFirstDay(props.calendar.month.value))
+const prevMonth = () => emits('update:month', C.prevMonthFirstDay(props.calendar.month.value))
 </script>
 
 <template>

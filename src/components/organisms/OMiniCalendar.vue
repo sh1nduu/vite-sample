@@ -15,14 +15,12 @@ const { calendar: calendarLocal } = useCalendar({
 })
 const { setMonth: setMonthGlobal, setSelectedDay: setSelectedDayGlobal } = useCalendarMutator(props.calendar)
 const { setMonth: setMonthLocal, setSelectedDay: setSelectedDayLocal } = useCalendarMutator(calendarLocal)
-watch(
-  () => props.calendar.month,
-  (dateRef) => setMonthLocal(dateRef.value)
-)
-watch(
-  () => props.calendar.selectedDay,
-  (dateRef) => setSelectedDayLocal(dateRef.value)
-)
+
+// Since the calendar consists of Ref<T>, props destructure is safe here.
+// eslint-disable-next-line vue/no-setup-props-destructure
+const { selectedDay: selectedDayRef, month: monthRef } = props.calendar
+watch(monthRef, (month) => setMonthLocal(month) && setSelectedDayLocal(month))
+watch(selectedDayRef, (day) => setSelectedDayLocal(day))
 </script>
 
 <template>
